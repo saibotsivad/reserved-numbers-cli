@@ -1,6 +1,6 @@
 {
   "name": "reserved-numbers-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Manage and reserve a range of number of numbers. Mostly used as a sort of port manager for an nginx module.",
   "bin": {
     "reserved-numbers-cli": "bin.js"
