@@ -87,14 +87,11 @@ if (command === 'list' || (command === 'get' && !name)) {
 		numbers.forEach(key => {
 			console.log(`  ${key} (${config.numbers[key].length}): ${JSON.stringify(config.numbers[key])}`)
 		})
-	} else {
-		die('none configured')
 	}
 } else if (command === 'get' && name) {
-	console.log(JSON.stringify(config.numbers[name]))
-} else if (command === 'delete') {
-	delete config.numbers[name]
-	write(config)
+	if (config.numbers[name]) {
+		console.log(JSON.stringify(config.numbers[name]))
+	}
 } else if (command === 'reserve' && process.argv[4]) {
 	const quantityOfNumbersToReserve = parseInt(process.argv[4], 10)
 	const numbersToReserve = reserveNumbers(getUsedNumbersMap(getUsedNumbers()), quantityOfNumbersToReserve)
@@ -106,6 +103,9 @@ if (command === 'list' || (command === 'get' && !name)) {
 	if (config.numbers[name]) {
 		config.numbers[name] = config.numbers[name].filter(num => num !== numberToDeallocate)
 		console.log(JSON.stringify(config.numbers[name]))
+		if (config.numbers[name].length === 0) {
+			delete config.numbers[name]
+		}
 		write(config)
 	}
 } else if (command === 'config') {
