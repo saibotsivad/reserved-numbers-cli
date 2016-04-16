@@ -102,15 +102,21 @@ if (command === 'list' || (command === 'get' && !name)) {
 	config.numbers[name] = (config.numbers[name] || []).concat(numbersToReserve)
 	console.log(JSON.stringify(config.numbers[name]))
 	write(config)
-} else if (command === 'remove' && process.argv[4]) {
-	const numberToDeallocate = parseInt(process.argv[4], 10)
-	if (config.numbers[name]) {
-		config.numbers[name] = config.numbers[name].filter(num => num !== numberToDeallocate)
-		console.log(JSON.stringify(config.numbers[name]))
-		if (config.numbers[name].length === 0) {
-			delete config.numbers[name]
+} else if (command === 'remove') {
+	if (process.argv[4]) {
+		const numberToDeallocate = parseInt(process.argv[4], 10)
+		if (config.numbers[name]) {
+			config.numbers[name] = config.numbers[name].filter(num => num !== numberToDeallocate)
+			console.log(JSON.stringify(config.numbers[name]))
+			if (config.numbers[name].length === 0) {
+				delete config.numbers[name]
+			}
+			write(config)
 		}
+	} else {
+		delete config.numbers[name]
 		write(config)
+		console.log(`'${name}' entirely deleted, all numbers freed`)
 	}
 } else if (command === 'config') {
 	const setters = Object.keys(cleanedArgs)
