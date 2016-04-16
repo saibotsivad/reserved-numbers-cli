@@ -36,8 +36,9 @@ use like: reserved-numbers-cli command
 where 'command' is one of the following:
   list
   get NAME                           # list all reserved numbers for that name
-  reserve NAME [quantityOfNumbers]   # reserves N more numbers and echos out
-  free NAME [number]                   # deallocate a number from a name
+  register NAME [quantityOfNumbers]  # register site with this many numbers
+  add NAME [quantityOfNumbers]       # reserve additional quantity of numbers
+  remove NAME [number]               # remove number from name, or remove name if no number
   config [options]                   # set program options like --foo-bar`
 
 function die(message) {
@@ -92,13 +93,16 @@ if (command === 'list' || (command === 'get' && !name)) {
 	if (config.numbers[name]) {
 		console.log(JSON.stringify(config.numbers[name]))
 	}
-} else if (command === 'reserve' && process.argv[4]) {
+} else if ((command === 'register' || command === 'add') && process.argv[4]) {
+	if (command === 'register' && config.numbers[name]) {
+		die('name already in registered')
+	}
 	const quantityOfNumbersToReserve = parseInt(process.argv[4], 10)
 	const numbersToReserve = reserveNumbers(getUsedNumbersMap(getUsedNumbers()), quantityOfNumbersToReserve)
 	config.numbers[name] = (config.numbers[name] || []).concat(numbersToReserve)
 	console.log(JSON.stringify(config.numbers[name]))
 	write(config)
-} else if (command === 'free' && process.argv[4]) {
+} else if (command === 'remove' && process.argv[4]) {
 	const numberToDeallocate = parseInt(process.argv[4], 10)
 	if (config.numbers[name]) {
 		config.numbers[name] = config.numbers[name].filter(num => num !== numberToDeallocate)
