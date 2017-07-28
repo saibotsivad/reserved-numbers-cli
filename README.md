@@ -1,5 +1,7 @@
 # reserved-numbers-cli
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/saibotsivad/reserved-numbers-cli.svg)](https://greenkeeper.io/)
+
 Manage and reserve a range of number of numbers.
 
 I'm mostly using this as a sort of port manager for an nginx module.
